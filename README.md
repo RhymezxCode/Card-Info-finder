@@ -36,3 +36,5 @@ I created five activities, four models and a network check provider class.
 5. theArtofCrop: To crop images from the camera URI
 6. Dexter: To request runtime permission in the app.
 
+#Download from:
+bit.ly/CardInfoFinder
