@@ -30,9 +30,7 @@ import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import rhymezx.code.card_information_finder.BuildConfig
 import rhymezx.code.card_information_finder.R
-import rhymezx.code.card_information_finder.databinding.ActivityCardInformationDisplayBinding
 import rhymezx.code.card_information_finder.databinding.ActivityCardOptionSelectionBinding
-import rhymezx.code.card_information_finder.databinding.ActivitySplashScreenBinding
 import java.io.File
 import java.io.IOException
 
