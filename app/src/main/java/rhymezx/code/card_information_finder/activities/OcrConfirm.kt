@@ -11,16 +11,13 @@ import com.github.kittinunf.fuel.core.isSuccessful
 import com.github.kittinunf.fuel.httpGet
 import com.google.android.material.snackbar.Snackbar
 import rhymezx.code.card_information_finder.R
-import rhymezx.code.card_information_finder.databinding.ActivityCardInformationDisplayBinding
-import rhymezx.code.card_information_finder.databinding.ActivityCardProcessorBinding
 import rhymezx.code.card_information_finder.databinding.ActivityOcrConfirmBinding
-import rhymezx.code.card_information_finder.databinding.ActivitySplashScreenBinding
 import rhymezx.code.card_information_finder.models.CardInfoPage
 import rhymezx.code.card_information_finder.models.Urls
 import rhymezx.code.card_information_finder.providers.CheckNetwork.isConnected
 import rhymezx.code.card_information_finder.util.showSnack
 
-class OCRconfirm : AppCompatActivity(), View.OnClickListener {
+class OcrConfirm : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityOcrConfirmBinding
 
     //on back press
@@ -34,27 +31,21 @@ class OCRconfirm : AppCompatActivity(), View.OnClickListener {
 
     //bundle data
     private var bundle: Bundle = Bundle()
-
     private var card_number: String? = null
-
     private var dialog: LoadingDialog = LoadingDialog(this)
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityOcrConfirmBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val number_bundle = intent.extras
-
-        if (number_bundle != null)
-            binding.card.text = number_bundle.getString("cardNumber")
-
-        card_number = number_bundle?.getString("cardNumber").toString()
-            .replace(" ", "").trim()
-
+        val bundle = intent.extras
+        if (bundle != null) binding.card.text = bundle.getString("cardNumber")
+        card_number = bundle?.getString("cardNumber").toString().replace(
+            " ",
+            ""
+        ).trim()
         binding.back.setOnClickListener(this)
-
         binding.proceed.setOnClickListener(this)
     }
 
@@ -94,15 +85,12 @@ class OCRconfirm : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun getInformation(
-        card_number: String,
-        responseHandler: (result: CardInfoPage) -> Unit
+        card_number: String, responseHandler: (result: CardInfoPage) -> Unit
     ) {
         dialog.loadingAlertDialog()
 
-        Urls.getInformationUrl(card_number)
-            .httpGet()
-            .responseObject(CardInfoPage.Deserializer())
-            { _, response, result ->
+        Urls.getInformationUrl(card_number).httpGet()
+            .responseObject(CardInfoPage.Deserializer()) { _, response, result ->
 
                 Log.v("response: ", response.toString())
 
@@ -130,6 +118,7 @@ class OCRconfirm : AppCompatActivity(), View.OnClickListener {
                                 }
                             }
                         }
+
                         response.isServerError -> {
                             dialog.dismissAlertDialog()
                             Snackbar.make(
@@ -138,6 +127,7 @@ class OCRconfirm : AppCompatActivity(), View.OnClickListener {
                                 Snackbar.LENGTH_SHORT
                             ).show()
                         }
+
                         response.isClientError -> {
                             dialog.dismissAlertDialog()
                             when (response.statusCode) {
@@ -148,6 +138,7 @@ class OCRconfirm : AppCompatActivity(), View.OnClickListener {
                                         Snackbar.LENGTH_SHORT
                                     ).show()
                                 }
+
                                 429 -> {
                                     Snackbar.make(
                                         findViewById(android.R.id.content),
@@ -155,6 +146,7 @@ class OCRconfirm : AppCompatActivity(), View.OnClickListener {
                                         Snackbar.LENGTH_SHORT
                                     ).show()
                                 }
+
                                 400 -> {
                                     Snackbar.make(
                                         findViewById(android.R.id.content),
@@ -162,6 +154,7 @@ class OCRconfirm : AppCompatActivity(), View.OnClickListener {
                                         Snackbar.LENGTH_SHORT
                                     ).show()
                                 }
+
                                 else -> {
                                     Snackbar.make(
                                         findViewById(android.R.id.content),
@@ -172,6 +165,7 @@ class OCRconfirm : AppCompatActivity(), View.OnClickListener {
                             }
 
                         }
+
                         else -> {
                             dialog.dismissAlertDialog()
                             Snackbar.make(
@@ -186,9 +180,7 @@ class OCRconfirm : AppCompatActivity(), View.OnClickListener {
                 } catch (error: Exception) {
                     Log.v("error: ", error.toString())
                 }
-
             }
-
     }
 
     override fun onBackPressed() {
@@ -200,8 +192,7 @@ class OCRconfirm : AppCompatActivity(), View.OnClickListener {
             finishAffinity()
         } else {
             Snackbar.make(
-                findViewById(android.R.id.content),
-                "Touch again to exit",
+                findViewById(android.R.id.content), "Touch again to exit",
                 Snackbar.LENGTH_SHORT
             ).show()
             backPressed = System.currentTimeMillis()

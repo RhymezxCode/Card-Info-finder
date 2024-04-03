@@ -33,7 +33,7 @@
 
         <activity android:exported="true"
             android:windowSoftInputMode="adjustResize|stateHidden"
-            android:name=".activities.OCRconfirm" />
+            android:name=".activities.OcrConfirm" />
         <activity android:exported="true"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:name=".activities.CardProcessor" />

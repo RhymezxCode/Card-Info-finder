@@ -1,42 +1,17 @@
 package rhymezx.code.card_information_finder.activities
 
-import android.Manifest
-import android.app.Activity
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Bitmap
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
-import android.provider.Settings
-import android.util.Log
-import android.util.SparseArray
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.FileProvider
-import com.google.android.gms.vision.Frame
-import com.google.android.gms.vision.text.TextBlock
-import com.google.android.gms.vision.text.TextRecognizer
 import com.google.android.material.snackbar.Snackbar
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
 import lens24.intent.Card
 import lens24.intent.ScanCardCallback
 import lens24.intent.ScanCardIntent
-import rhymezx.code.card_information_finder.BuildConfig
 import rhymezx.code.card_information_finder.R
 import rhymezx.code.card_information_finder.databinding.ActivityCardOptionSelectionBinding
-import java.io.File
-import java.io.IOException
 
 
 @Suppress("DEPRECATION")
@@ -84,7 +59,7 @@ class CardOptionSelection : AppCompatActivity(), View.OnClickListener {
         startActivity(
             Intent(
                 this,
-                OCRconfirm::class.java
+                OcrConfirm::class.java
             ).putExtras(bundle)
         )
     }
