@@ -22,6 +22,7 @@ import rhymezx.code.card_information_finder.providers.CheckNetwork.isConnected
 
 class CardProcessor : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityCardProcessorBinding
+
     //on back press
     private var backPressed: Long? = 0
 
@@ -61,20 +62,20 @@ class CardProcessor : AppCompatActivity(), View.OnClickListener {
                 R.id.proceed -> {
                     if (isConnected(this)) {
                         if (cardForm?.cardNumber?.isNotEmpty() == true) {
-                            cardForm?.cardNumber?.substring(0, 7)?.let {
-                                getInformation(it) { cardInfoPage ->
-                                    cardBrand = cardInfoPage.brand
-                                    cardType = cardInfoPage.type
-                                    bankName = cardInfoPage.bank!!.name
-                                    countryName = cardInfoPage.country!!.name
+                            if ((cardForm?.cardNumber?.length ?: 0) < 8) {
+                                showSnack()
+                            } else {
+                                cardForm?.cardNumber?.substring(0, 7)?.let {
+                                    getInformation(it) { cardInfoPage ->
+                                        cardBrand = cardInfoPage.brand
+                                        cardType = cardInfoPage.type
+                                        bankName = cardInfoPage.bank!!.name
+                                        countryName = cardInfoPage.country!!.name
+                                    }
                                 }
                             }
                         } else {
-                            Snackbar.make(
-                                findViewById(android.R.id.content),
-                                "Please enter the first 8 digits of your card!",
-                                Snackbar.LENGTH_SHORT
-                            ).show()
+                            showSnack()
                         }
                     } else {
                         Snackbar.make(
@@ -92,6 +93,14 @@ class CardProcessor : AppCompatActivity(), View.OnClickListener {
 
             }
         }
+    }
+
+    private fun showSnack() {
+        Snackbar.make(
+            findViewById(android.R.id.content),
+            "Please enter the first 8 digits of your card!",
+            Snackbar.LENGTH_SHORT
+        ).show()
     }
 
     private fun getInformation(
@@ -127,10 +136,10 @@ class CardProcessor : AppCompatActivity(), View.OnClickListener {
                                             CardInformationDisplay::class.java
                                         ).putExtras(bundle)
                                     )
-                                    finish()
                                 }
                             }
                         }
+
                         response.isServerError -> {
                             dialog.dismissAlertDialog()
                             Snackbar.make(
@@ -139,6 +148,7 @@ class CardProcessor : AppCompatActivity(), View.OnClickListener {
                                 Snackbar.LENGTH_SHORT
                             ).show()
                         }
+
                         response.isClientError -> {
                             dialog.dismissAlertDialog()
                             when (response.statusCode) {
@@ -149,6 +159,7 @@ class CardProcessor : AppCompatActivity(), View.OnClickListener {
                                         Snackbar.LENGTH_SHORT
                                     ).show()
                                 }
+
                                 429 -> {
                                     Snackbar.make(
                                         findViewById(android.R.id.content),
@@ -156,6 +167,7 @@ class CardProcessor : AppCompatActivity(), View.OnClickListener {
                                         Snackbar.LENGTH_SHORT
                                     ).show()
                                 }
+
                                 400 -> {
                                     Snackbar.make(
                                         findViewById(android.R.id.content),
@@ -163,8 +175,8 @@ class CardProcessor : AppCompatActivity(), View.OnClickListener {
                                         Snackbar.LENGTH_SHORT
                                     ).show()
                                 }
-                                else ->
-                                {
+
+                                else -> {
                                     Snackbar.make(
                                         findViewById(android.R.id.content),
                                         "Client error!!!",
@@ -174,6 +186,7 @@ class CardProcessor : AppCompatActivity(), View.OnClickListener {
                             }
 
                         }
+
                         else -> {
                             dialog.dismissAlertDialog()
                             Snackbar.make(

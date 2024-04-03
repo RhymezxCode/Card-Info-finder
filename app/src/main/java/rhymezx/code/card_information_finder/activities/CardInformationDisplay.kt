@@ -20,6 +20,10 @@ class CardInformationDisplay : AppCompatActivity(), View.OnClickListener {
         binding = ActivityCardInformationDisplayBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.back.setOnClickListener{
+            finish()
+        }
+
         val bundle = intent.extras
 
         if (bundle != null) {
