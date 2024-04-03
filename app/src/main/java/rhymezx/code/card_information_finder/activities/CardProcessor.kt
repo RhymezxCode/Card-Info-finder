@@ -60,18 +60,19 @@ class CardProcessor : AppCompatActivity(), View.OnClickListener {
             when (v.id) {
                 R.id.proceed -> {
                     if (isConnected(this)) {
-                        if (cardForm!!.cardNumber.isNotEmpty()) {
-
-                            getInformation(cardForm!!.cardNumber) { CardInfoPage ->
-                                cardBrand = CardInfoPage.brand
-                                cardType = CardInfoPage.type
-                                bankName = CardInfoPage.bank!!.name
-                                countryName = CardInfoPage.country!!.name
+                        if (cardForm?.cardNumber?.isNotEmpty() == true) {
+                            cardForm?.cardNumber?.substring(0, 7)?.let {
+                                getInformation(it) { cardInfoPage ->
+                                    cardBrand = cardInfoPage.brand
+                                    cardType = cardInfoPage.type
+                                    bankName = cardInfoPage.bank!!.name
+                                    countryName = cardInfoPage.country!!.name
+                                }
                             }
                         } else {
                             Snackbar.make(
                                 findViewById(android.R.id.content),
-                                "Please enter all your card number!!!!",
+                                "Please enter the first 8 digits of your card!",
                                 Snackbar.LENGTH_SHORT
                             ).show()
                         }
