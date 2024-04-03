@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import rhymezx.code.card_information_finder.R
 import rhymezx.code.card_information_finder.databinding.ActivityCardInformationDisplayBinding
-import rhymezx.code.card_information_finder.databinding.ActivitySplashScreenBinding
 
 class CardInformationDisplay : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityCardInformationDisplayBinding
