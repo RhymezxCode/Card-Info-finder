@@ -54,8 +54,7 @@ class CardOptionSelection : AppCompatActivity(), View.OnClickListener {
     private var bundle: Bundle = Bundle()
 
     private var activityResultCallback = ScanCardCallback.Builder()
-        .setOnSuccess { card: Card, bitmap: Bitmap? -> setCard(card) }
-        .setOnBackPressed { finish() }
+        .setOnSuccess { card: Card, _: Bitmap? -> setCard(card) }
         .setOnError {
             Snackbar.make(
                 findViewById(android.R.id.content),

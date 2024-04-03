@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android'
 android {
     compileSdk 34
     namespace 'rhymezx.code.card_information_finder'
+    ndkVersion "26.1.10909125"
     defaultConfig {
         applicationId "rhymezx.code.card_information_finder"
         minSdkVersion 21
