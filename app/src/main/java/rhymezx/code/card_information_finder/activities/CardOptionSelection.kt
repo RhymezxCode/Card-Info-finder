@@ -1,14 +1,42 @@
 package rhymezx.code.card_information_finder.activities
 
+import android.Manifest
+import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
+import android.provider.Settings
+import android.util.Log
+import android.util.SparseArray
 import android.view.View
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
+import com.google.android.gms.vision.Frame
+import com.google.android.gms.vision.text.TextBlock
+import com.google.android.gms.vision.text.TextRecognizer
 import com.google.android.material.snackbar.Snackbar
-import io.card.payment.CardIOActivity
-import io.card.payment.CreditCard
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
+import lens24.intent.Card
+import lens24.intent.ScanCardCallback
+import lens24.intent.ScanCardIntent
+import rhymezx.code.card_information_finder.BuildConfig
 import rhymezx.code.card_information_finder.R
 import rhymezx.code.card_information_finder.databinding.ActivityCardOptionSelectionBinding
+import java.io.File
+import java.io.IOException
 
 
 @Suppress("DEPRECATION")
@@ -25,23 +53,22 @@ class CardOptionSelection : AppCompatActivity(), View.OnClickListener {
     //bundle data
     private var bundle: Bundle = Bundle()
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 123) {
-            if (data != null && data.hasExtra(CardIOActivity.EXTRA_SCAN_RESULT)) {
-                val scanResult: CreditCard? =
-                    data.getParcelableExtra(CardIOActivity.EXTRA_SCAN_RESULT)
-
-                setCard(scanResult?.cardNumber?: "")
-            } else {
-                Snackbar.make(
-                    findViewById(android.R.id.content),
-                    "Scan was canceled.",
-                    Snackbar.LENGTH_SHORT
-                ).show()
-            }
+    private var activityResultCallback = ScanCardCallback.Builder()
+        .setOnSuccess { card: Card, bitmap: Bitmap? -> setCard(card) }
+        .setOnBackPressed { finish() }
+        .setOnError {
+            Snackbar.make(
+                findViewById(android.R.id.content),
+                "Something went wrong!",
+                Snackbar.LENGTH_LONG
+            ).show()
         }
-    }
+        .build()
+
+    private var startActivityIntent = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+        activityResultCallback
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,38 +79,34 @@ class CardOptionSelection : AppCompatActivity(), View.OnClickListener {
         binding.cardOcr.setOnClickListener(this)
     }
 
-    private fun setCard(card: String) {
-        bundle.putString("cardNumber", card)
+    private fun setCard(card: Card) {
+        bundle.putString("cardNumber", card.cardNumber)
         startActivity(
             Intent(
                 this,
-                OcrConfirm::class.java
+                OCRconfirm::class.java
             ).putExtras(bundle)
         )
     }
 
     private fun scanCard() {
-        val scanIntent = Intent(this, CardIOActivity::class.java)
-
-        // customize these values to suit your needs.
-        scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, true) // default: false
-        scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_CVV, false) // default: false
-        scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_POSTAL_CODE, false) // default: false
-
-        // MY_SCAN_REQUEST_CODE is arbitrary and is only used within this activity.
-        startActivityForResult(scanIntent, 123)
+        val intent: Intent = ScanCardIntent.Builder(this)
+            // customize these values to suit your needs
+            .setVibrationEnabled(true)
+            .setHint("Please kindly scan your card")
+            .setToolbarTitle("Scan your card")
+            .setSaveCard(false)
+            .setBottomHint("Please kindly place your card in the box above!")
+            .setMainColor(R.color.colorPrimary)
+            .build()
+        startActivityIntent.launch(intent)
     }
 
     override fun onClick(v: View?) {
         if (v != null) {
             when (v.id) {
-                R.id.card_number -> startActivity(
-                    Intent(
-                        this,
-                        CardProcessor::class.java
-                    )
-                )
-
+                R.id.card_number -> startActivity(Intent(this,
+                    CardProcessor::class.java))
                 R.id.card_ocr -> {
                     scanCard()
 //                    Dexter.withActivity(this)
