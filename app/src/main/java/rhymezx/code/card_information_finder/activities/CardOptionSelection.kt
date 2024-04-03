@@ -28,15 +28,16 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
-import kotlinx.android.synthetic.main.activity_card_option_selection.*
 import rhymezx.code.card_information_finder.BuildConfig
 import rhymezx.code.card_information_finder.R
+import rhymezx.code.card_information_finder.databinding.ActivityCardOptionSelectionBinding
 import java.io.File
 import java.io.IOException
 
 
 @Suppress("DEPRECATION")
 class CardOptionSelection : AppCompatActivity(), View.OnClickListener {
+    private lateinit var binding: ActivityCardOptionSelectionBinding
 
     private var backPass: Long? = 0
 
@@ -51,10 +52,9 @@ class CardOptionSelection : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        setContentView(R.layout.activity_card_option_selection)
-        card_number.setOnClickListener(this)
-        card_ocr.setOnClickListener(this)
-
+        setContentView(binding.root)
+        binding.cardNumber.setOnClickListener(this)
+        binding.cardOcr.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -131,7 +131,8 @@ class CardOptionSelection : AppCompatActivity(), View.OnClickListener {
         val file: File = getImageFile()
         val uri: Uri
         uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", file)
+            FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID +
+                    ".provider", file)
         } else {
             Uri.fromFile(file)
         }

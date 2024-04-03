@@ -12,15 +12,16 @@ import com.github.kittinunf.fuel.core.isServerError
 import com.github.kittinunf.fuel.core.isSuccessful
 import com.github.kittinunf.fuel.httpGet
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_card_processor.*
 import rhymezx.code.card_information_finder.R
+import rhymezx.code.card_information_finder.databinding.ActivityCardInformationDisplayBinding
+import rhymezx.code.card_information_finder.databinding.ActivityCardProcessorBinding
 import rhymezx.code.card_information_finder.models.CardInfoPage
 import rhymezx.code.card_information_finder.models.Urls
 import rhymezx.code.card_information_finder.providers.CheckNetwork.isConnected
 
 
 class CardProcessor : AppCompatActivity(), View.OnClickListener {
-
+    private lateinit var binding: ActivityCardProcessorBinding
     //on back press
     private var backPressed: Long? = 0
 
@@ -41,15 +42,15 @@ class CardProcessor : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        setContentView(R.layout.activity_card_processor)
+        setContentView(binding.root)
 
-        cardForm = findViewById(R.id.card)
+        cardForm = binding.card
 
-        cardForm!!.cardRequired(true).setup(this)
+        cardForm?.cardRequired(true)?.setup(this)
 
-        back.setOnClickListener(this)
+        binding.back.setOnClickListener(this)
 
-        proceed.setOnClickListener(this)
+        binding.proceed.setOnClickListener(this)
     }
 
 

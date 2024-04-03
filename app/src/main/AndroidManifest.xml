@@ -2,10 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="rhymezx.code.card_information_finder">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -25,10 +31,10 @@
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="ocr" />
 
-        <activity android:name=".activities.OCRconfirm" />
-        <activity android:name=".activities.CardProcessor" />
-        <activity android:name=".activities.CardOptionSelection" />
-        <activity android:name=".activities.SplashScreen">
+        <activity android:exported="true" android:name=".activities.OCRconfirm" />
+        <activity android:exported="true" android:name=".activities.CardProcessor" />
+        <activity android:exported="true" android:name=".activities.CardOptionSelection" />
+        <activity android:exported="true" android:name=".activities.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -36,8 +42,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.CardInformationDisplay" />
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+        <activity android:exported="true" android:name=".activities.CardInformationDisplay" />
+        <activity android:exported="true" android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat"/>
 
         <provider

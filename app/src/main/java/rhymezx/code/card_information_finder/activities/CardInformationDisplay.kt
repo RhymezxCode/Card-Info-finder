@@ -5,26 +5,26 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_card_information_display.*
 import rhymezx.code.card_information_finder.R
+import rhymezx.code.card_information_finder.databinding.ActivityCardInformationDisplayBinding
 
 class CardInformationDisplay : AppCompatActivity(), View.OnClickListener {
+    private lateinit var binding: ActivityCardInformationDisplayBinding
 
     var back_pressed: Long? = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        setContentView(R.layout.activity_card_information_display)
-
+        setContentView(binding.root)
 
         val bundle = intent.extras
 
         if (bundle != null) {
-            card_brand.text = bundle.getString("brand")
-            card_type.text = bundle.getString("type")
-            bank.text = bundle.getString("bank_name")
-            country.text = bundle.getString("country_name")
+            binding.cardBrand.text = bundle.getString("brand")
+            binding.cardType.text = bundle.getString("type")
+            binding.bank.text = bundle.getString("bank_name")
+            binding.country.text = bundle.getString("country_name")
 
             Snackbar.make(
                 findViewById(android.R.id.content),
@@ -33,11 +33,7 @@ class CardInformationDisplay : AppCompatActivity(), View.OnClickListener {
             ).show()
         }
 
-
-
-
-
-        menu.setOnClickListener(this)
+        binding.menu.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {

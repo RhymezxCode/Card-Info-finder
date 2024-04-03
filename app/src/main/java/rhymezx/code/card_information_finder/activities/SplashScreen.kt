@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_splash_screen.*
 import rhymezx.code.card_information_finder.R
+import rhymezx.code.card_information_finder.databinding.ActivityCardInformationDisplayBinding
+import rhymezx.code.card_information_finder.databinding.ActivitySplashScreenBinding
 
 
 class SplashScreen : AppCompatActivity() {
+    private lateinit var binding: ActivitySplashScreenBinding
 
     var back_pressed: Long? = 0
 
@@ -18,13 +20,13 @@ class SplashScreen : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash_screen)
+        setContentView(binding.root)
 
         Thread(Runnable {
             while (progressBarStatus < 100) {
                 progressBarStatus++
                 android.os.SystemClock.sleep(20)
-                handler?.post { progressBar.progress = progressBarStatus }
+                handler?.post { binding.progressBar.progress = progressBarStatus }
             }
 
             if (progressBarStatus == 100) {

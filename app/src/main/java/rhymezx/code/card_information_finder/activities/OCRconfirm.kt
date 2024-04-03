@@ -10,13 +10,16 @@ import com.github.kittinunf.fuel.core.isServerError
 import com.github.kittinunf.fuel.core.isSuccessful
 import com.github.kittinunf.fuel.httpGet
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_ocr_confirm.*
 import rhymezx.code.card_information_finder.R
+import rhymezx.code.card_information_finder.databinding.ActivityCardInformationDisplayBinding
+import rhymezx.code.card_information_finder.databinding.ActivityOcrConfirmBinding
 import rhymezx.code.card_information_finder.models.CardInfoPage
 import rhymezx.code.card_information_finder.models.Urls
 import rhymezx.code.card_information_finder.providers.CheckNetwork.isConnected
 
 class OCRconfirm : AppCompatActivity(), View.OnClickListener {
+    private lateinit var binding: ActivityOcrConfirmBinding
+
     //on back press
     private var backPressed: Long? = 0
 
@@ -36,18 +39,19 @@ class OCRconfirm : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_ocr_confirm)
+        setContentView(binding.root)
 
         val number_bundle = intent.extras
 
         if (number_bundle != null)
-            card.text = number_bundle.getString("cardNumber")
+            binding.card.text = number_bundle.getString("cardNumber")
 
-        card_number = number_bundle!!.getString("cardNumber").toString().replace(" ", "")
+        card_number = number_bundle?.getString("cardNumber").toString()
+            .replace(" ", "")
 
-        back.setOnClickListener(this)
+        binding.back.setOnClickListener(this)
 
-        proceed.setOnClickListener(this)
+        binding.proceed.setOnClickListener(this)
 
         Snackbar.make(
             findViewById(android.R.id.content),
