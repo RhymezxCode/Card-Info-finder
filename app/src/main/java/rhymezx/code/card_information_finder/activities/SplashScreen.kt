@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
-import rhymezx.code.card_information_finder.R
-import rhymezx.code.card_information_finder.databinding.ActivityCardInformationDisplayBinding
 import rhymezx.code.card_information_finder.databinding.ActivitySplashScreenBinding
 
 

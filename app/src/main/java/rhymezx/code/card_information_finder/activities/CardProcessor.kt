@@ -1,6 +1,5 @@
 package rhymezx.code.card_information_finder.activities
 
-
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -13,7 +12,6 @@ import com.github.kittinunf.fuel.core.isSuccessful
 import com.github.kittinunf.fuel.httpGet
 import com.google.android.material.snackbar.Snackbar
 import rhymezx.code.card_information_finder.R
-import rhymezx.code.card_information_finder.databinding.ActivityCardInformationDisplayBinding
 import rhymezx.code.card_information_finder.databinding.ActivityCardProcessorBinding
 import rhymezx.code.card_information_finder.models.CardInfoPage
 import rhymezx.code.card_information_finder.models.Urls
