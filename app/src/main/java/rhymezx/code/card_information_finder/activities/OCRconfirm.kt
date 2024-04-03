@@ -18,6 +18,7 @@ import rhymezx.code.card_information_finder.databinding.ActivitySplashScreenBind
 import rhymezx.code.card_information_finder.models.CardInfoPage
 import rhymezx.code.card_information_finder.models.Urls
 import rhymezx.code.card_information_finder.providers.CheckNetwork.isConnected
+import rhymezx.code.card_information_finder.util.showSnack
 
 class OCRconfirm : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityOcrConfirmBinding
@@ -50,39 +51,33 @@ class OCRconfirm : AppCompatActivity(), View.OnClickListener {
             binding.card.text = number_bundle.getString("cardNumber")
 
         card_number = number_bundle?.getString("cardNumber").toString()
-            .replace(" ", "")
+            .replace(" ", "").trim()
 
         binding.back.setOnClickListener(this)
 
         binding.proceed.setOnClickListener(this)
-
-        Snackbar.make(
-            findViewById(android.R.id.content),
-            "If you didn't see your card number, press back to retake the picture!!!",
-            Snackbar.LENGTH_LONG
-        ).show()
-
     }
 
     override fun onClick(v: View?) {
         if (v != null) {
             when (v.id) {
                 R.id.proceed -> {
-
                     if (isConnected(this)) {
-                        if (card_number!!.isNotEmpty()) {
-                            getInformation(card_number!!) { CardInfoPage ->
-                                cardBrand = CardInfoPage.brand
-                                cardType = CardInfoPage.type
-                                bankName = CardInfoPage.bank!!.name
-                                countryName = CardInfoPage.country!!.name
+                        if (card_number?.isNotEmpty() == true) {
+                            if ((card_number?.length ?: 0) < 8) {
+                                this.showSnack()
+                            } else {
+                                card_number?.substring(0, 7)?.let {
+                                    getInformation(it) { cardInfoPage ->
+                                        cardBrand = cardInfoPage.brand
+                                        cardType = cardInfoPage.type
+                                        bankName = cardInfoPage.bank!!.name
+                                        countryName = cardInfoPage.country!!.name
+                                    }
+                                }
                             }
                         } else {
-                            Snackbar.make(
-                                findViewById(android.R.id.content),
-                                "Please enter all your card number!!!!",
-                                Snackbar.LENGTH_SHORT
-                            ).show()
+                            this.showSnack()
                         }
                     } else {
                         Snackbar.make(
@@ -91,13 +86,9 @@ class OCRconfirm : AppCompatActivity(), View.OnClickListener {
                             Snackbar.LENGTH_SHORT
                         ).show()
                     }
-
-
                 }
 
                 R.id.back -> finish()
-
-
             }
         }
     }

@@ -12,12 +12,11 @@ import com.github.kittinunf.fuel.core.isSuccessful
 import com.github.kittinunf.fuel.httpGet
 import com.google.android.material.snackbar.Snackbar
 import rhymezx.code.card_information_finder.R
-import rhymezx.code.card_information_finder.databinding.ActivityCardInformationDisplayBinding
-import rhymezx.code.card_information_finder.databinding.ActivityCardOptionSelectionBinding
 import rhymezx.code.card_information_finder.databinding.ActivityCardProcessorBinding
 import rhymezx.code.card_information_finder.models.CardInfoPage
 import rhymezx.code.card_information_finder.models.Urls
 import rhymezx.code.card_information_finder.providers.CheckNetwork.isConnected
+import rhymezx.code.card_information_finder.util.showSnack
 
 
 class CardProcessor : AppCompatActivity(), View.OnClickListener {
@@ -47,11 +46,8 @@ class CardProcessor : AppCompatActivity(), View.OnClickListener {
         setContentView(binding.root)
 
         cardForm = binding.card
-
         cardForm?.cardRequired(true)?.setup(this)
-
         binding.back.setOnClickListener(this)
-
         binding.proceed.setOnClickListener(this)
     }
 
@@ -63,7 +59,7 @@ class CardProcessor : AppCompatActivity(), View.OnClickListener {
                     if (isConnected(this)) {
                         if (cardForm?.cardNumber?.isNotEmpty() == true) {
                             if ((cardForm?.cardNumber?.length ?: 0) < 8) {
-                                showSnack()
+                                this.showSnack()
                             } else {
                                 cardForm?.cardNumber?.substring(0, 7)?.let {
                                     getInformation(it) { cardInfoPage ->
@@ -75,7 +71,7 @@ class CardProcessor : AppCompatActivity(), View.OnClickListener {
                                 }
                             }
                         } else {
-                            showSnack()
+                            this.showSnack()
                         }
                     } else {
                         Snackbar.make(
@@ -84,32 +80,20 @@ class CardProcessor : AppCompatActivity(), View.OnClickListener {
                             Snackbar.LENGTH_SHORT
                         ).show()
                     }
-
-
                 }
 
                 R.id.back -> finish()
-
-
             }
         }
     }
 
-    private fun showSnack() {
-        Snackbar.make(
-            findViewById(android.R.id.content),
-            "Please enter the first 8 digits of your card!",
-            Snackbar.LENGTH_SHORT
-        ).show()
-    }
-
     private fun getInformation(
-        card_number: String,
+        cardNumber: String,
         responseHandler: (result: CardInfoPage) -> Unit
     ) {
         dialog.loadingAlertDialog()
 
-        Urls.getInformationUrl(card_number)
+        Urls.getInformationUrl(cardNumber)
             .httpGet()
             .responseObject(CardInfoPage.Deserializer())
             { _, response, result ->
@@ -201,10 +185,7 @@ class CardProcessor : AppCompatActivity(), View.OnClickListener {
                 } catch (error: Exception) {
                     Log.v("error: ", error.toString())
                 }
-
             }
-
-
     }
 
     override fun onBackPressed() {

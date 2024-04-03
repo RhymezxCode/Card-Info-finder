@@ -73,4 +73,7 @@ dependencies {
     // Dexter runtime permissions
     implementation 'com.karumi:dexter:6.2.3'
 
+    //Len24 for OCR
+    implementation 'io.github.vlasentiy:lens24:2.0.1'
+
 }
