@@ -12,6 +12,8 @@ import com.github.kittinunf.fuel.core.isSuccessful
 import com.github.kittinunf.fuel.httpGet
 import com.google.android.material.snackbar.Snackbar
 import rhymezx.code.card_information_finder.R
+import rhymezx.code.card_information_finder.databinding.ActivityCardInformationDisplayBinding
+import rhymezx.code.card_information_finder.databinding.ActivityCardOptionSelectionBinding
 import rhymezx.code.card_information_finder.databinding.ActivityCardProcessorBinding
 import rhymezx.code.card_information_finder.models.CardInfoPage
 import rhymezx.code.card_information_finder.models.Urls
@@ -40,6 +42,7 @@ class CardProcessor : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        binding = ActivityCardProcessorBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         cardForm = binding.card

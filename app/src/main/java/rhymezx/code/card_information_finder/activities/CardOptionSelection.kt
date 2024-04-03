@@ -30,7 +30,9 @@ import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import rhymezx.code.card_information_finder.BuildConfig
 import rhymezx.code.card_information_finder.R
+import rhymezx.code.card_information_finder.databinding.ActivityCardInformationDisplayBinding
 import rhymezx.code.card_information_finder.databinding.ActivityCardOptionSelectionBinding
+import rhymezx.code.card_information_finder.databinding.ActivitySplashScreenBinding
 import java.io.File
 import java.io.IOException
 
@@ -52,6 +54,7 @@ class CardOptionSelection : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        binding = ActivityCardOptionSelectionBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.cardNumber.setOnClickListener(this)
         binding.cardOcr.setOnClickListener(this)

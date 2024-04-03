@@ -12,7 +12,9 @@ import com.github.kittinunf.fuel.httpGet
 import com.google.android.material.snackbar.Snackbar
 import rhymezx.code.card_information_finder.R
 import rhymezx.code.card_information_finder.databinding.ActivityCardInformationDisplayBinding
+import rhymezx.code.card_information_finder.databinding.ActivityCardProcessorBinding
 import rhymezx.code.card_information_finder.databinding.ActivityOcrConfirmBinding
+import rhymezx.code.card_information_finder.databinding.ActivitySplashScreenBinding
 import rhymezx.code.card_information_finder.models.CardInfoPage
 import rhymezx.code.card_information_finder.models.Urls
 import rhymezx.code.card_information_finder.providers.CheckNetwork.isConnected
@@ -39,6 +41,7 @@ class OCRconfirm : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityOcrConfirmBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val number_bundle = intent.extras

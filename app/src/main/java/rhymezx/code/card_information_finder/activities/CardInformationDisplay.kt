@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import rhymezx.code.card_information_finder.R
 import rhymezx.code.card_information_finder.databinding.ActivityCardInformationDisplayBinding
+import rhymezx.code.card_information_finder.databinding.ActivitySplashScreenBinding
 
 class CardInformationDisplay : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityCardInformationDisplayBinding
@@ -16,6 +17,7 @@ class CardInformationDisplay : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        binding = ActivityCardInformationDisplayBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val bundle = intent.extras
