@@ -114,12 +114,20 @@ class CardProcessor : AppCompatActivity(), View.OnClickListener {
 
                             when (response.statusCode) {
                                 200 -> {
-                                    startActivity(
-                                        Intent(
-                                            this,
-                                            CardInformationDisplay::class.java
-                                        ).putExtras(bundle)
-                                    )
+                                    if(!data.bank?.name.isNullOrEmpty()){
+                                        startActivity(
+                                            Intent(
+                                                this,
+                                                CardInformationDisplay::class.java
+                                            ).putExtras(bundle)
+                                        )
+                                    }else{
+                                        Snackbar.make(
+                                            findViewById(android.R.id.content),
+                                            "No available data from card!",
+                                            Snackbar.LENGTH_SHORT
+                                        ).show()
+                                    }
                                 }
                             }
                         }

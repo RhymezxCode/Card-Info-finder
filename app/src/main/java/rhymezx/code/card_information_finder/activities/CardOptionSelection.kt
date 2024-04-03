@@ -1,15 +1,12 @@
 package rhymezx.code.card_information_finder.activities
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
-import lens24.intent.Card
-import lens24.intent.ScanCardCallback
-import lens24.intent.ScanCardIntent
+import io.card.payment.CardIOActivity
+import io.card.payment.CreditCard
 import rhymezx.code.card_information_finder.R
 import rhymezx.code.card_information_finder.databinding.ActivityCardOptionSelectionBinding
 
@@ -28,22 +25,23 @@ class CardOptionSelection : AppCompatActivity(), View.OnClickListener {
     //bundle data
     private var bundle: Bundle = Bundle()
 
-    private var activityResultCallback = ScanCardCallback.Builder()
-        .setOnSuccess { card: Card, bitmap: Bitmap? -> setCard(card) }
-        .setOnBackPressed { finish() }
-        .setOnError {
-            Snackbar.make(
-                findViewById(android.R.id.content),
-                "Something went wrong!",
-                Snackbar.LENGTH_LONG
-            ).show()
-        }
-        .build()
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 123) {
+            if (data != null && data.hasExtra(CardIOActivity.EXTRA_SCAN_RESULT)) {
+                val scanResult: CreditCard? =
+                    data.getParcelableExtra(CardIOActivity.EXTRA_SCAN_RESULT)
 
-    private var startActivityIntent = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult(),
-        activityResultCallback
-    )
+                setCard(scanResult?.cardNumber?: "")
+            } else {
+                Snackbar.make(
+                    findViewById(android.R.id.content),
+                    "Scan was canceled.",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,8 +52,8 @@ class CardOptionSelection : AppCompatActivity(), View.OnClickListener {
         binding.cardOcr.setOnClickListener(this)
     }
 
-    private fun setCard(card: Card) {
-        bundle.putString("cardNumber", card.cardNumber)
+    private fun setCard(card: String) {
+        bundle.putString("cardNumber", card)
         startActivity(
             Intent(
                 this,
@@ -65,23 +63,27 @@ class CardOptionSelection : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun scanCard() {
-        val intent: Intent = ScanCardIntent.Builder(this)
-            // customize these values to suit your needs
-            .setVibrationEnabled(true)
-            .setHint("Please kindly scan your card")
-            .setToolbarTitle("Scan your card")
-            .setSaveCard(false)
-            .setBottomHint("Please kindly place your card in the box above!")
-            .setMainColor(R.color.colorPrimary)
-            .build()
-        startActivityIntent.launch(intent)
+        val scanIntent = Intent(this, CardIOActivity::class.java)
+
+        // customize these values to suit your needs.
+        scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_EXPIRY, true) // default: false
+        scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_CVV, false) // default: false
+        scanIntent.putExtra(CardIOActivity.EXTRA_REQUIRE_POSTAL_CODE, false) // default: false
+
+        // MY_SCAN_REQUEST_CODE is arbitrary and is only used within this activity.
+        startActivityForResult(scanIntent, 123)
     }
 
     override fun onClick(v: View?) {
         if (v != null) {
             when (v.id) {
-                R.id.card_number -> startActivity(Intent(this,
-                    CardProcessor::class.java))
+                R.id.card_number -> startActivity(
+                    Intent(
+                        this,
+                        CardProcessor::class.java
+                    )
+                )
+
                 R.id.card_ocr -> {
                     scanCard()
 //                    Dexter.withActivity(this)
